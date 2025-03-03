@@ -314,7 +314,7 @@ int16x8_t inline filter8_8_ps_partial(const int8x16_t s0, const int8x16_t s1,
 
 namespace X265_NS {
 template<int width, int height>
-void interp8_horiz_pp_dotprod(const uint8_t *src, intptr_t srcStride,
+void interp8_horiz_pp_dotprod_dp(const uint8_t *src, intptr_t srcStride,
                               uint8_t *dst, intptr_t dstStride, int coeffIdx)
 {
     const int N_TAPS = 8;
@@ -396,7 +396,7 @@ void interp8_horiz_pp_dotprod(const uint8_t *src, intptr_t srcStride,
 }
 
 template<int width, int height>
-void interp8_horiz_ps_dotprod(const uint8_t *src, intptr_t srcStride,
+void interp8_horiz_ps_dotprod_dp(const uint8_t *src, intptr_t srcStride,
                               int16_t *dst, intptr_t dstStride, int coeffIdx,
                               int isRowExt)
 {
@@ -986,15 +986,15 @@ void interp_hv_pp_dotprod(const pixel *src, intptr_t srcStride, pixel *dst,
     const int N_TAPS = 8;
     ALIGN_VAR_32(int16_t, immed[width * (height + N_TAPS - 1)]);
 
-    interp8_horiz_ps_dotprod<width, height>(src, srcStride, immed, width, idxX,
+    interp8_horiz_ps_dotprod_dp<width, height>(src, srcStride, immed, width, idxX,
                                             1);
     interp_vert_sp_neon<N_TAPS, width, height>(immed + (N_TAPS / 2 - 1) * width,
                                                width, dst, dstStride, idxY);
 }
 
 #define LUMA_DOTPROD(W, H) \
-        p.pu[LUMA_ ## W ## x ## H].luma_hpp = interp8_horiz_pp_dotprod<W, H>; \
-        p.pu[LUMA_ ## W ## x ## H].luma_hps = interp8_horiz_ps_dotprod<W, H>; \
+        p.pu[LUMA_ ## W ## x ## H].luma_hpp = interp8_horiz_pp_dotprod_dp<W, H>; \
+        p.pu[LUMA_ ## W ## x ## H].luma_hps = interp8_horiz_ps_dotprod_dp<W, H>; \
         p.pu[LUMA_ ## W ## x ## H].luma_vps = interp8_vert_ps_dotprod<W, H>;  \
         p.pu[LUMA_ ## W ## x ## H].luma_hvpp = interp_hv_pp_dotprod<W, H>;
 

@@ -335,7 +335,7 @@ uint8x8_t inline filter8_8_pp_partial(const uint8x16_t s0, const uint8x16_t s1,
 
 namespace X265_NS {
 template<int width, int height>
-void inline interp8_horiz_pp_dotprod(const uint8_t *src, intptr_t srcStride,
+void inline interp8_horiz_pp_dotprod_i8mm(const uint8_t *src, intptr_t srcStride,
                                      uint8_t *dst, intptr_t dstStride,
                                      int coeffIdx)
 {
@@ -498,7 +498,7 @@ void interp8_horiz_pp_i8mm(const uint8_t *src, intptr_t srcStride, uint8_t *dst,
         return interp8_horiz_pp_matmul<1, width, height>(src, srcStride, dst,
                                                          dstStride);
     case 2:
-        return interp8_horiz_pp_dotprod<width, height>(src, srcStride, dst,
+        return interp8_horiz_pp_dotprod_i8mm<width, height>(src, srcStride, dst,
                                                        dstStride, coeffIdx);
     case 3:
         return interp8_horiz_pp_matmul<3, width, height>(src, srcStride, dst,
@@ -507,7 +507,7 @@ void interp8_horiz_pp_i8mm(const uint8_t *src, intptr_t srcStride, uint8_t *dst,
 }
 
 template<int width, int height>
-void inline interp8_horiz_ps_dotprod(const uint8_t *src, intptr_t srcStride,
+void inline interp8_horiz_ps_dotprod_i8mm(const uint8_t *src, intptr_t srcStride,
                                      int16_t *dst, intptr_t dstStride,
                                      int coeffIdx, int isRowExt)
 {
@@ -754,7 +754,7 @@ void interp8_horiz_ps_i8mm(const uint8_t *src, intptr_t srcStride, int16_t *dst,
         return interp8_horiz_ps_matmul<1, width, height>(src, srcStride, dst,
                                                          dstStride, isRowExt);
     case 2:
-        return interp8_horiz_ps_dotprod<width, height>(src, srcStride, dst,
+        return interp8_horiz_ps_dotprod_i8mm<width, height>(src, srcStride, dst,
                                                        dstStride, coeffIdx,
                                                        isRowExt);
     case 3:
